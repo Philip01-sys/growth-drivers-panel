@@ -1,0 +1,9 @@
+term,estimate,std_error,p_value
+log_gdppc_l1,-8.43,1.9,1.08e-5
+investment_l1,0.0372,0.0366,0.309
+trade_l1,0.0498,0.0113,1.1e-5
+infl_log_l1,-3.44,1.22,0.00487
+pop_growth_l1,-0.173,0.429,0.686
+gov_cons_l1,-0.148,0.0839,0.0782
+fdi_l1,0.0551,0.0477,0.248
+resources_l1,0.073,0.0463,0.115

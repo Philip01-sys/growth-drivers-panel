@@ -1,0 +1,118 @@
+---
+title: "What Drives Economic Growth in Sub-Saharan Africa?"
+subtitle: "A panel study of GDP per capita growth, 2000-2023"
+author: "Philip"
+date: today
+format:
+  html:
+    toc: true
+    code-fold: true
+    theme: cosmo
+    embed-resources: true
+execute:
+  echo: false
+  warning: false
+---
+
+```{r}
+#| include: false
+library(readr)
+library(knitr)
+library(dplyr)
+root <- here::here()   # if 'here' is not installed: install.packages("here")
+tab <- function(f) read_csv(file.path(root, "output/tables", f), show_col_types = FALSE)
+fig <- function(f) file.path(root, "output/figures", f)
+fit <- tab("model_fit.csv")
+haus <- tab("hausman.csv")
+```
+
+## Summary
+
+Across `r fit$n_countries[2]` Sub-Saharan African economies from 2000 to 2023, per-capita growth picks up after periods of greater trade openness and slows after high inflation and heavy government consumption. In the preferred fixed-effects model, a 10-point rise in trade/GDP is associated with about 0.5 percentage points faster growth the following year, inflation rising from 5% to 25% with about 0.6 points slower growth, and a 5-point rise in government consumption/GDP with about 0.7 points slower growth. Investment, FDI, natural resource rents and population growth show no reliable effect once stable country differences and region-wide shocks are controlled for.
+
+## Question and data
+
+**Question:** Which economic conditions are associated with faster growth in GDP per capita across Sub-Saharan Africa?
+
+**Data:** World Bank World Development Indicators, `r fit$n_countries[2]` countries, 2000-2023. All explanatory variables are lagged one year to reduce reverse causality.
+
+| Variable | WDI code | Expected effect |
+|---|---|---|
+| GDP per capita growth (outcome) | NY.GDP.PCAP.KD.ZG | |
+| Log GDP per capita | NY.GDP.PCAP.KD | Negative (convergence) |
+| Investment, % GDP | NE.GDI.TOTL.ZS | Positive |
+| Trade, % GDP | NE.TRD.GNFS.ZS | Positive |
+| Inflation (log 1 + rate) | FP.CPI.TOTL.ZG | Negative |
+| Population growth | SP.POP.GROW | Negative |
+| Government consumption, % GDP | NE.CON.GOVT.ZS | Ambiguous |
+| FDI inflows, % GDP | BX.KLT.DINV.WD.GD.ZS | Positive |
+| Natural resource rents, % GDP | NY.GDP.TOTL.RT.ZS | Ambiguous ("resource curse") |
+
+```{r}
+kable(tab("missing_data.csv"), col.names = c("Variable", "% missing"),
+      caption = "Share of country-years missing before cleaning")
+```
+
+## Descriptive picture
+
+![](`r fig("growth_trend.png")`)
+
+![](`r fig("investment_vs_growth.png")`)
+
+```{r}
+kable(tab("summary_stats.csv"), caption = "Summary statistics")
+```
+
+## Method
+
+Three panel models are estimated: pooled OLS, fixed effects with country and year effects, and random effects. Standard errors are clustered by country. A Hausman test compares fixed and random effects.
+
+```{r}
+kable(haus, caption = "Hausman test")
+```
+
+The Hausman test prefers **`r haus$preferred`** (p = `r haus$p_value`).
+
+## Results
+
+```{r}
+models <- tab("models.csv") |>
+  mutate(cell = sprintf("%.3f%s (%.3f)", estimate, coalesce(stars, ""), std_error)) |>
+  select(model, term, cell) |>
+  tidyr::pivot_wider(names_from = model, values_from = cell)
+kable(models, caption = "Coefficients (clustered standard errors in brackets). * p<0.1, ** p<0.05, *** p<0.01")
+kable(fit, caption = "Model fit")
+```
+
+![](`r fig("coefficients.png")`)
+
+**How to read the fixed-effects results** (the Hausman test rejects random effects, p < 0.001, so fixed effects are preferred):
+
+- **Trade openness (+0.050\*\*\*):** each extra percentage point of trade/GDP is associated with 0.05 points higher growth the next year, so +10 points of trade means about +0.5 points of growth.
+- **Inflation (-3.44\*\*\*, on log(1 + rate)):** moving from 5% to 25% inflation raises log(1 + rate) by about 0.17, which is associated with about 0.6 points lower growth.
+- **Government consumption (-0.148\*\*):** +5 points of GDP is associated with about 0.7 points lower growth.
+- **Initial income (-8.43\*\*\*):** countries grow more slowly after years when they are richer than their own average, a within-country catch-up pattern. Its size should be read with caution (see Limitations).
+- **Investment, FDI, resource rents, population growth:** positive or negative signs but not statistically significant. The investment result differs from the simple scatter plot, which mixes differences *between* countries with changes *within* them.
+
+## Robustness
+
+Fixed-effects results with Driscoll-Kraay standard errors, which also allow for shocks common to all countries (such as commodity price swings):
+
+```{r}
+kable(tab("fe_driscoll_kraay.csv"))
+```
+
+The same models are replicated in Stata (`code/stata/models.do`).
+
+## Limitations
+
+- Associations, not proof of cause: lagging the variables reduces but does not remove reverse causality.
+- Missing data are not random; smaller and conflict-affected economies report less.
+- Country averages hide differences within countries.
+- With country fixed effects, the lagged income term is biased downward in short panels (Nickell bias), so its size is overstated; the other coefficients are less affected. A GMM estimator (e.g. `plm::pgmm`) is a natural next step.
+
+## What this means
+
+- **Keep inflation low and stable.** It is the clearest drag on growth in this sample.
+- **Open up to trade.** Economies that trade more, relative to their size, grow faster the following year.
+- **Watch the size of government consumption.** Rising public consumption is associated with slower growth; spending that raises productivity matters more than spending more.

@@ -1,0 +1,11 @@
+.Rproj.user/
+.Rhistory
+.RData
+.Rdata
+.DS_Store
+report/*_files/
+report/.quarto/
+renv/library/
+
+/.quarto/
+**/*.quarto_ipynb

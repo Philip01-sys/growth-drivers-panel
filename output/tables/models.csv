@@ -1,0 +1,25 @@
+model,term,estimate,std_error,p_value,stars
+Pooled OLS,log_gdppc_l1,-0.89,0.302,0.00332,***
+Pooled OLS,investment_l1,0.0488,0.0356,0.171,
+Pooled OLS,trade_l1,0.0118,0.00934,0.209,
+Pooled OLS,infl_log_l1,-1.66,1.06,0.119,
+Pooled OLS,pop_growth_l1,-0.54,0.353,0.127,
+Pooled OLS,gov_cons_l1,-0.0734,0.0424,0.0835,*
+Pooled OLS,fdi_l1,0.0429,0.0447,0.337,
+Pooled OLS,resources_l1,-0.0177,0.0234,0.45,
+Fixed effects (country + year),log_gdppc_l1,-8.43,1.71,9.76e-7,***
+Fixed effects (country + year),investment_l1,0.0372,0.0309,0.229,
+Fixed effects (country + year),trade_l1,0.0498,0.016,0.00197,***
+Fixed effects (country + year),infl_log_l1,-3.44,1.16,0.00318,***
+Fixed effects (country + year),pop_growth_l1,-0.173,0.48,0.718,
+Fixed effects (country + year),gov_cons_l1,-0.148,0.0708,0.0371,**
+Fixed effects (country + year),fdi_l1,0.0551,0.0463,0.235,
+Fixed effects (country + year),resources_l1,0.073,0.0536,0.174,
+Random effects,log_gdppc_l1,-1.15,0.329,4.76e-4,***
+Random effects,investment_l1,0.0358,0.034,0.293,
+Random effects,trade_l1,0.0175,0.0107,0.101,
+Random effects,infl_log_l1,-2.12,0.939,0.0245,**
+Random effects,pop_growth_l1,-0.572,0.367,0.12,
+Random effects,gov_cons_l1,-0.079,0.0463,0.0887,*
+Random effects,fdi_l1,0.0542,0.0482,0.261,
+Random effects,resources_l1,0.00166,0.026,0.949,

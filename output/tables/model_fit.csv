@@ -1,0 +1,4 @@
+model,n_obs,n_countries,r2_within_or_overall
+Pooled OLS,790,42,0.055
+Fixed effects (country + year),790,42,0.104
+Random effects,790,42,0.052
