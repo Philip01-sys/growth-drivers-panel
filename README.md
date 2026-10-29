@@ -52,4 +52,4 @@ Then in the terminal: `quarto render`
 
 I'm a data and research analyst working in R, Stata, SPSS, EViews and Excel. I turn raw data into clear, defensible answers: econometrics, survey analysis, forecasting and dashboards.
 
-**[LinkedIn](https://www.linkedin.com/in/philip-nuhu-019073307)** · **nuhuphilip61@gmail.com** · Available for remote roles and freelance projects worldwide.
+**[LinkedIn](https://www.linkedin.com/in/philip-nuhu-data-analyst)** · **nuhuphilip61@gmail.com** · Available for remote roles and freelance projects worldwide.
